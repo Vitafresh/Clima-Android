@@ -14,6 +14,15 @@ import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class WeatherController extends AppCompatActivity {
@@ -21,8 +30,12 @@ public class WeatherController extends AppCompatActivity {
     // Constants:
     final int REQUEST_CODE = 11111;
     final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather";
+
     // App ID to use OpenWeather data
     final String APP_ID = "5e8752a808837d9b64aa7990b885a9f9";
+    //final String APP_ID = "5e8752a808837d9b64aa7990b885a9f0"; //Fake appid
+    //https://api.openweathermap.org/data/2.5/weather?lat=46.65581&lon=32.6178016&appid=5e8752a808837d9b64aa7990b885a9f9
+
     // Time between location updates (5000 milliseconds or 5 seconds)
     final long MIN_TIME = 5000;
     // Distance between location updates (1000m or 1km)
@@ -85,6 +98,12 @@ public class WeatherController extends AppCompatActivity {
                 String latitude = String.valueOf(location.getLatitude());
                 Log.d("Clima","Longitude = " + longitude);
                 Log.d("Clima","Latitude = " + latitude);
+
+                RequestParams params = new RequestParams();
+                params.put("lat",latitude);
+                params.put("lon",longitude);
+                params.put("appid",APP_ID);
+                letsDoSomeNetworking(params);
             }
 
             @Override
@@ -135,6 +154,26 @@ public class WeatherController extends AppCompatActivity {
     }
 
 // TODO: Add letsDoSomeNetworking(RequestParams params) here:
+    private void letsDoSomeNetworking(RequestParams params){
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(WEATHER_URL,params, new JsonHttpResponseHandler(){
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response){
+                Log.d("Clima","client.get OnSuccess");
+                Log.d("Clima", "JSON: " + response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable e, JSONObject response){
+                Log.d("Clima","client.get OnFailure");
+                Log.e("Clima","Fail: " + e.toString());
+                Log.d("Clima","Status code: " + statusCode);
+                Toast.makeText(WeatherController.this, "Request Failed", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+    }
 
 
 
