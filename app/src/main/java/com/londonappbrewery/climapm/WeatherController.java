@@ -102,6 +102,8 @@ public class WeatherController extends AppCompatActivity {
                 RequestParams params = new RequestParams();
                 params.put("lat",latitude);
                 params.put("lon",longitude);
+                params.put("units","metric");
+//                params.put("lang","ru");
                 params.put("appid",APP_ID);
                 letsDoSomeNetworking(params);
             }
@@ -162,6 +164,8 @@ public class WeatherController extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
                 Log.d("Clima","client.get OnSuccess");
                 Log.d("Clima", "JSON: " + response.toString());
+                WeatherDataModel weather = WeatherDataModel.fromJSON(response);
+
             }
 
             @Override
