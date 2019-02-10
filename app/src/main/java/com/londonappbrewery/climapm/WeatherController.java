@@ -2,6 +2,7 @@ package com.londonappbrewery.climapm;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,8 +44,8 @@ public class WeatherController extends AppCompatActivity {
     final float MIN_DISTANCE = 1000;
 
     // TODO: Set LOCATION_PROVIDER here:
-    private final String LOCATION_PROVIDER = LocationManager.NETWORK_PROVIDER;
-//    private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER; //On phisical device more quick search of location
+//    private final String LOCATION_PROVIDER = LocationManager.NETWORK_PROVIDER;    //On phisical device more quick search of location
+    private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;          //For precise GPS search and for emulators
 
 
     // Member Variables:
@@ -73,7 +74,8 @@ public class WeatherController extends AppCompatActivity {
         changeCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent myIntent = new Intent(WeatherController.this, ChangeCityController.class);
+                startActivity(myIntent);
             }
         });
 
