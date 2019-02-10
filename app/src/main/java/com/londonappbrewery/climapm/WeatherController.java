@@ -33,10 +33,11 @@ public class WeatherController extends AppCompatActivity {
     final int REQUEST_CODE = 11111;
     final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather";
 
+    //https://api.openweathermap.org/data/2.5/weather?lat=46.65581&lon=32.6178016&appid=5e8752a808837d9b64aa7990b885a9f9
     // App ID to use OpenWeather data
     final String APP_ID = "5e8752a808837d9b64aa7990b885a9f9";
     //final String APP_ID = "5e8752a808837d9b64aa7990b885a9f0"; //Fake appid
-    //https://api.openweathermap.org/data/2.5/weather?lat=46.65581&lon=32.6178016&appid=5e8752a808837d9b64aa7990b885a9f9
+    final  String MEASURE_UNITS = "metric";
 
     // Time between location updates (5000 milliseconds or 5 seconds)
     final long MIN_TIME = 5000;
@@ -91,14 +92,26 @@ public class WeatherController extends AppCompatActivity {
 
         Intent myIntent = getIntent();
         String city = myIntent.getStringExtra("City");
-        Log.d("Clima","City = " + city);
 
-        Log.d("Clima", "Getting weather for current location");
-        getWeatherForCurrentLocation();
+        if(city != null){
+            Log.d("Clima","City = " + city);
+            getWeatherForNewCity(city);
+        }
+        else {
+            Log.d("Clima", "Getting weather for current location");
+            getWeatherForCurrentLocation();
+        }
     }
 
 
     // TODO: Add getWeatherForNewCity(String city) here:
+    public void getWeatherForNewCity(String city){
+        RequestParams params = new RequestParams();
+        params.put("appid",APP_ID);
+        params.put("q",city);
+        params.put("units",MEASURE_UNITS);
+        letsDoSomeNetworking(params);
+    }
 
 
     // TODO: Add getWeatherForCurrentLocation() here:
@@ -115,11 +128,10 @@ public class WeatherController extends AppCompatActivity {
                 Log.d("Clima","Latitude = " + latitude);
 
                 RequestParams params = new RequestParams();
+                params.put("appid",APP_ID);
                 params.put("lat",latitude);
                 params.put("lon",longitude);
-                params.put("units","metric");
-//                params.put("lang","ru");
-                params.put("appid",APP_ID);
+                params.put("units",MEASURE_UNITS);
                 letsDoSomeNetworking(params);
             }
 
@@ -212,5 +224,10 @@ public class WeatherController extends AppCompatActivity {
     // TODO: Add onPause() here:
 
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mLocationManager != null) mLocationManager.removeUpdates(mLocationListener);
+        
+    }
 }
