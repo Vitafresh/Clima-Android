@@ -43,7 +43,8 @@ public class WeatherController extends AppCompatActivity {
     final float MIN_DISTANCE = 1000;
 
     // TODO: Set LOCATION_PROVIDER here:
-    private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER;
+    private final String LOCATION_PROVIDER = LocationManager.NETWORK_PROVIDER;
+//    private final String LOCATION_PROVIDER = LocationManager.GPS_PROVIDER; //On phisical device more quick search of location
 
 
     // Member Variables:
@@ -72,7 +73,7 @@ public class WeatherController extends AppCompatActivity {
         changeCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
 
